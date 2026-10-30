@@ -62,6 +62,8 @@ http.createServer(async(req,res)=>{
     console.error('NVIDIA returned no usable text:',JSON.stringify({finishReason:finish||null,choiceKeys:Object.keys(choice||{}),messageKeys:Object.keys(message||{}),responseKeys:Object.keys(j||{})}));
     return send(res,502,{error:'A NVIDIA respondeu, mas não enviou texto utilizável. Tente novamente.'});
    }
+   console.info('Transform completed:',JSON.stringify({resultLength:result.length,elapsedMs:Date.now()-startedAt}));
+   return send(res,200,{result});
   }catch(e){console.error('NVIDIA request failed:',String(e?.name||'Error'));return send(res,500,{error:'Não foi possível conectar à NVIDIA. Tente novamente.'});}});
   return;
  }

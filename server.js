@@ -52,9 +52,16 @@ http.createServer(async(req,res)=>{
     return send(res,502,{error:'A API da NVIDIA retornou um erro ('+status+'). Consulte os logs para identificar o motivo.'});
    }
    const choice=j.choices?.[0],finish=choice?.finish_reason;
-   const result=typeof choice?.message?.content==='string'?choice.message.content.trim():'';
-   if(!result)return send(res,502,{error:'A NVIDIA não retornou texto. Motivo: '+(finish||'resposta vazia')+'. Tente ajustar o prompt.'});
-   return send(res,200,{result});
+   const message=choice?.message||{};
+   let result='';
+   if(typeof message.content==='string')result=message.content.trim();
+   else if(Array.isArray(message.content))result=message.content.map(part=>typeof part==='string'?part:(part?.text||'')).join('').trim();
+   if(!result&&typeof choice?.text==='string')result=choice.text.trim();
+   if(!result&&typeof message.reasoning_content==='string')result=message.reasoning_content.trim();
+   if(!result){
+    console.error('NVIDIA returned no usable text:',JSON.stringify({finishReason:finish||null,choiceKeys:Object.keys(choice||{}),messageKeys:Object.keys(message||{}),responseKeys:Object.keys(j||{})}));
+    return send(res,502,{error:'A NVIDIA respondeu, mas não enviou texto utilizável. Tente novamente.'});
+   }
   }catch(e){console.error('NVIDIA request failed:',String(e?.name||'Error'));return send(res,500,{error:'Não foi possível conectar à NVIDIA. Tente novamente.'});}});
   return;
  }

@@ -1,0 +1,1 @@
+{"name":"esconde-esconde-prompt","version":"1.0.0","private":true,"description":"Transformador de prompts com IA","scripts":{"start":"node server.js"},"engines":{"node":">=18"}}

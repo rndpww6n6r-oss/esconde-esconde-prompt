@@ -4,7 +4,7 @@ const path=require('node:path');
 const PORT=process.env.PORT||3000, KEY=process.env.GEMINI_API_KEY, MODEL=process.env.GEMINI_MODEL||'gemini-2.5-flash';
 const send=(res,status,obj)=>{res.writeHead(status,{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store','X-Content-Type-Options':'nosniff','X-Frame-Options':'DENY','Referrer-Policy':'no-referrer'});res.end(JSON.stringify(obj));};
 http.createServer(async(req,res)=>{
- const pathname=new URL(req.url,'http://localhost').pathname.replace(/\\/+$/,'')||'/';
+ const pathname=new URL(req.url,'http://localhost').pathname.replace(/\/+$/,'')||'/';
  if(req.method==='GET'&&(pathname==='/'||pathname==='/index.html')){res.writeHead(200,{'Content-Type':'text/html; charset=utf-8','X-Content-Type-Options':'nosniff','X-Frame-Options':'DENY','Referrer-Policy':'no-referrer'});fs.createReadStream(path.join(__dirname,'public/index.html')).pipe(res);return;}
  if(req.method==='GET'&&pathname==='/health')return send(res,200,{ok:true,provider:'gemini'});
  if(req.method==='POST'&&pathname==='/api/transform'){

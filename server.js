@@ -1,7 +1,7 @@
 const http=require('node:http');
 const fs=require('node:fs');
 const path=require('node:path');
-const PORT=process.env.PORT||3000, KEY=process.env.GEMINI_API_KEY, MODEL=process.env.GEMINI_MODEL||'gemini-2.5-flash';
+const PORT=process.env.PORT||3000, KEY=process.env.GEMINI_API_KEY, MODEL=(process.env.GEMINI_MODEL&&process.env.GEMINI_MODEL!=='gemini-2.5-flash'?process.env.GEMINI_MODEL:'gemini-3.8-flash');
 const send=(res,status,obj)=>{res.writeHead(status,{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store','X-Content-Type-Options':'nosniff','X-Frame-Options':'DENY','Referrer-Policy':'no-referrer'});res.end(JSON.stringify(obj));};
 http.createServer(async(req,res)=>{
  const pathname=new URL(req.url,'http://localhost').pathname.replace(/\/+$/,'')||'/';

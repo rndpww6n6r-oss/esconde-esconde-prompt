@@ -2,7 +2,7 @@ const http=require('node:http');
 const fs=require('node:fs');
 const path=require('node:path');
 const PORT=process.env.PORT||3000;
-const KEY=process.env.NVIDIA_API_KEY;
+const KEY=(process.env.NVIDIA_API_KEY||'').trim();
 const MODEL=process.env.NVIDIA_MODEL||'meta/llama-3.3-70b-instruct';
 const API_URL='https://integrate.api.nvidia.com/v1/chat/completions';
 const send=(res,status,obj)=>{res.writeHead(status,{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store','X-Content-Type-Options':'nosniff','X-Frame-Options':'DENY','Referrer-Policy':'no-referrer'});res.end(JSON.stringify(obj));};
